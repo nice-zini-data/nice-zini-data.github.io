@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: http://www.nicezinidata.co.kr/index.html
