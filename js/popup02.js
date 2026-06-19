@@ -89,38 +89,8 @@
 
     window.openEventPopup02Mobile = openEventPopup02;
 
-    function isHomePage02() {
-        const path = window.location.pathname.replace(/\/+$/, '') || '/';
-        if (path === '/' || path === '/home' || path === '/index.html') {
-            return true;
-        }
-        const segments = path.split('/').filter(Boolean);
-        return segments.length === 1 && segments[0] === 'index.html';
-    }
-
-    function initHomePopups02() {
-        if (isMobile()) {
-            return;
-        }
-
-        if (!isHiddenToday02()) {
-            setTimeout(openEventPopup02, 500);
-        }
-    }
-
     $(function() {
-        console.log('[EVENT-POPUP02] 스크립트 로드 완료');
-        const path = window.location.pathname;
-        console.log('[EVENT-POPUP02] 현재 경로:', path);
-
-        if (isHomePage02()) {
-            console.log('[EVENT-POPUP02] 홈 페이지 감지 - 팝업 자동 실행');
-            console.log('[EVENT-POPUP02] 모바일 여부:', isMobile());
-            console.log('[EVENT-POPUP02] 오늘 하루 보지 않기 여부:', isHiddenToday02());
-            initHomePopups02();
-        } else {
-            console.log('[EVENT-POPUP02] 홈 페이지가 아님 - 팝업 표시 안함');
-        }
+        console.log('[EVENT-POPUP02] 스크립트 로드 완료 (홈 자동 실행은 popup.js에서 제어)');
     });
 
 })();

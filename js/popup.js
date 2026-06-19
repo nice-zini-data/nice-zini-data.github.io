@@ -20,6 +20,10 @@
         return window.matchMedia('(max-width: 768px)').matches;
     }
 
+    function isSequentialPopupMode() {
+        return isMobile() || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
     function getTodayString() {
         const today = new Date();
         const year = today.getFullYear();
@@ -101,18 +105,27 @@
         return segments.length === 1 && segments[0] === 'index.html';
     }
 
+    function openEventPopup02FromMain() {
+        if (typeof window.openEventPopup02Mobile === 'function') {
+            window.openEventPopup02Mobile();
+        }
+    }
+
     function initHomePopups() {
-        if (isMobile()) {
+        if (isSequentialPopupMode()) {
             if (!isHiddenToday()) {
                 setTimeout(openEventPopup, 500);
-            } else if (!isHiddenTodayPopup02() && typeof window.openEventPopup02Mobile === 'function') {
-                setTimeout(window.openEventPopup02Mobile, 500);
+            } else if (!isHiddenTodayPopup02()) {
+                setTimeout(openEventPopup02FromMain, 500);
             }
             return;
         }
 
         if (!isHiddenToday()) {
             setTimeout(openEventPopup, 500);
+        }
+        if (!isHiddenTodayPopup02()) {
+            setTimeout(openEventPopup02FromMain, 500);
         }
     }
 
@@ -135,14 +148,16 @@
 
 const COOKIE_NAME = 'eventPopup';
 
-function isMobilePopup() {
-    return window.matchMedia('(max-width: 768px)').matches;
+function isSequentialPopupModeGlobal() {
+    return window.matchMedia('(max-width: 768px)').matches
+        || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-function closePopup() {
-    console.log('[EVENT-POPUP] 새창 닫기');
-
-    if (isMobilePopup() && window.opener && !window.opener.closed && typeof window.opener.openEventPopup02Mobile === 'function') {
+function closePopup1AndMaybeOpenPopup2() {
+    if (isSequentialPopupModeGlobal()
+        && window.opener
+        && !window.opener.closed
+        && typeof window.opener.openEventPopup02Mobile === 'function') {
         var opener = window.opener;
         window.close();
         setTimeout(function() {
@@ -152,6 +167,11 @@ function closePopup() {
     }
 
     window.close();
+}
+
+function closePopup() {
+    console.log('[EVENT-POPUP] 새창 닫기');
+    closePopup1AndMaybeOpenPopup2();
 }
 
 function getTodayString() {
@@ -173,5 +193,5 @@ function setDontShowTodayAndClose() {
     document.cookie = `${COOKIE_NAME}=${today};expires=${tomorrow.toUTCString()};path=/`;
     console.log('[EVENT-POPUP] 오늘하루 보지 않기 설정 완료:', today);
 
-    window.close();
+    closePopup1AndMaybeOpenPopup2();
 }
