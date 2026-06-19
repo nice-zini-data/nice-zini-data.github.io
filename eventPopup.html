@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유동인구 안내 팝업</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+            background: #fff;
+            overflow: hidden;
+        }
+        
+        .popup-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding-bottom: 40px; /* 버튼 공간 확보 */
+        }
+        
+        .popup-image {
+            width: 100%;
+            max-height:calc(100dvh - 40px);overflow-y: auto;
+            text-align: center;
+            position: relative;
+        }
+        
+        .popup-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            object-fit: contain;
+        }
+        
+        .popup-close-btn {background:none;border:none; color: rgba(0, 0, 0, 0.5);padding-right: 30px;cursor: pointer;font-size: 14px;font-weight: 500;font-family: 'Pretendard';}
+        .popup-close-btn:hover {color: rgba(0, 0, 0, 0.7);}
+        /* 오늘하루 보지 않기 영역 */
+        .popup-footer {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .popup-dont-show-btn {
+            background: none;
+            color: rgba(0, 0, 0, 0.5);
+            border: none;
+            padding: 4px 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+            padding-left: 30px;
+            font-family: 'Pretendard';
+        }
+        
+        .popup-dont-show-btn:hover {
+            color: rgba(0, 0, 0, 0.7);
+        }
+        
+        /* 반응형 스타일 */
+        @media (max-width: 400px) {
+            .popup-close-area {
+                top: 15px;
+                right: 15px;
+                width: 25px;
+                height: 25px;
+            }
+            
+            .popup-dont-show-btn {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-container">
+        <!-- 팝업 이미지 -->
+        <div class="popup-image">
+            <a href="file/2026년 도약(Jump-Up)프로그램 해외진출 네트워킹 운영 과업지시서.pdf" download><img src="images/popup_260619_pc.jpg" alt="도약 공고 팝업 이미지" /></a>
+            
+            
+        </div>
+        
+        <!-- 오늘하루 보지 않기 -->
+        <div class="popup-footer">
+            <button type="button" class="popup-dont-show-btn" onclick="setDontShowTodayAndClose()">
+                오늘하루 보지 않기
+            </button>
+
+            <button type="button" class="popup-close-btn" onclick="closePopup()">닫기</button>
+        </div>
+    </div>
+
+    <script src="js/popup.js"></script>
+</body>
+</html>
