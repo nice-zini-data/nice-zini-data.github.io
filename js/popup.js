@@ -148,21 +148,14 @@
 
 const COOKIE_NAME = 'eventPopup';
 
-function isSequentialPopupModeGlobal() {
-    return window.matchMedia('(max-width: 768px)').matches
-        || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
 function closePopup1AndMaybeOpenPopup2() {
-    if (isSequentialPopupModeGlobal()
-        && window.opener
+    if (window.opener
         && !window.opener.closed
         && typeof window.opener.openEventPopup02Mobile === 'function') {
         var opener = window.opener;
+        // 클릭 이벤트 컨텍스트 안에서 먼저 열어야 popup02 차단을 피할 수 있음
+        opener.openEventPopup02Mobile();
         window.close();
-        setTimeout(function() {
-            opener.openEventPopup02Mobile();
-        }, 150);
         return;
     }
 
