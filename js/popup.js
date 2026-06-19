@@ -148,12 +148,26 @@
 
 const COOKIE_NAME = 'eventPopup';
 
+function getMainWindowForPopupMode() {
+    if (window.opener && !window.opener.closed) {
+        return window.opener;
+    }
+    return window;
+}
+
+function isSequentialPopupModeGlobal() {
+    var mainWin = getMainWindowForPopupMode();
+    return mainWin.matchMedia('(max-width: 768px)').matches
+        || /Mobi|Android|iPhone|iPad|iPod/i.test(mainWin.navigator.userAgent);
+}
+
 function closePopup1AndMaybeOpenPopup2() {
-    if (window.opener
+    if (isSequentialPopupModeGlobal()
+        && window.opener
         && !window.opener.closed
         && typeof window.opener.openEventPopup02Mobile === 'function') {
         var opener = window.opener;
-        // 클릭 이벤트 컨텍스트 안에서 먼저 열어야 popup02 차단을 피할 수 있음
+        // 모바일: 클릭 컨텍스트 안에서 먼저 열어야 popup02 차단을 피할 수 있음
         opener.openEventPopup02Mobile();
         window.close();
         return;
