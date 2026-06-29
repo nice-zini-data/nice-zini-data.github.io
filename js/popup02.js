@@ -97,9 +97,36 @@
 
 const COOKIE_NAME02 = 'eventPopup02';
 
+function getMainWindowForPopup02Mode() {
+    if (window.opener && !window.opener.closed) {
+        return window.opener;
+    }
+    return window;
+}
+
+function isSequentialPopupModeFromPopup02() {
+    var mainWin = getMainWindowForPopup02Mode();
+    return mainWin.matchMedia('(max-width: 768px)').matches
+        || /Mobi|Android|iPhone|iPad|iPod/i.test(mainWin.navigator.userAgent);
+}
+
+function closePopup02AndMaybeOpenPopup03() {
+    if (isSequentialPopupModeFromPopup02()
+        && window.opener
+        && !window.opener.closed
+        && typeof window.opener.openEventPopup03Mobile === 'function') {
+        var opener = window.opener;
+        opener.openEventPopup03Mobile();
+        window.close();
+        return;
+    }
+
+    window.close();
+}
+
 function closePopup02() {
     console.log('[EVENT-POPUP02] 새창 닫기');
-    window.close();
+    closePopup02AndMaybeOpenPopup03();
 }
 
 function getTodayString02() {
@@ -121,5 +148,5 @@ function setDontShowTodayAndClose02() {
     document.cookie = `${COOKIE_NAME02}=${today};expires=${tomorrow.toUTCString()};path=/`;
     console.log('[EVENT-POPUP02] 오늘하루 보지 않기 설정 완료:', today);
 
-    window.close();
+    closePopup02AndMaybeOpenPopup03();
 }

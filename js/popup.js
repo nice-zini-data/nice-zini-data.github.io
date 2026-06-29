@@ -3,7 +3,7 @@
  *
  * 기능:
  * - 홈 페이지 접속 시 새창 팝업 자동 실행
- * - 모바일: popup1 → 닫기 시 popup2 순차 표출
+ * - 모바일: popup1 → 닫기 시 popup2 → 닫기 시 popup3 순차 표출
  * - "오늘 하루 보지 않기" 쿠키 처리
  *
  * @author NICE지니데이타
@@ -15,6 +15,7 @@
 
     const COOKIE_NAME = 'eventPopup';
     const COOKIE_NAME02 = 'eventPopup02';
+    const COOKIE_NAME03 = 'eventPopup03';
 
     function isMobile() {
         return window.matchMedia('(max-width: 768px)').matches;
@@ -67,6 +68,10 @@
         return isHiddenTodayByCookie(COOKIE_NAME02);
     }
 
+    function isHiddenTodayPopup03() {
+        return isHiddenTodayByCookie(COOKIE_NAME03);
+    }
+
     function getPopupFeatures(width, height, left, top) {
         return `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=yes,location=no,menubar=no,toolbar=no`;
     }
@@ -111,12 +116,20 @@
         }
     }
 
+    function openEventPopup03FromMain() {
+        if (typeof window.openEventPopup03Mobile === 'function') {
+            window.openEventPopup03Mobile();
+        }
+    }
+
     function initHomePopups() {
         if (isSequentialPopupMode()) {
             if (!isHiddenToday()) {
                 setTimeout(openEventPopup, 500);
             } else if (!isHiddenTodayPopup02()) {
                 setTimeout(openEventPopup02FromMain, 500);
+            } else if (!isHiddenTodayPopup03()) {
+                setTimeout(openEventPopup03FromMain, 500);
             }
             return;
         }
@@ -126,6 +139,9 @@
         }
         if (!isHiddenTodayPopup02()) {
             setTimeout(openEventPopup02FromMain, 500);
+        }
+        if (!isHiddenTodayPopup03()) {
+            setTimeout(openEventPopup03FromMain, 500);
         }
     }
 
