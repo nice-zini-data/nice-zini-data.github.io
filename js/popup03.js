@@ -69,7 +69,7 @@
 
         const popupWidth = isMobile() ? window.screen.width : 685;
         const popupHeight = isMobile() ? window.screen.height : 800 * 1.1;
-        const popupLeft = isMobile() ? 0 : 40;
+        const popupLeft = isMobile() ? 0 : 40; 
         const popupTop = isMobile() ? 0 : 40;
 
         const eventWindow03 = window.open(
