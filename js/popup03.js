@@ -2,12 +2,11 @@
  * 이벤트 팝업03 관리 모듈 (새창 방식 - eventPopup03)
  *
  * 기능:
- * - 데스크톱: 홈 페이지 접속 시 popup03 자동 실행
- * - 모바일: popup02 닫기 후 순차 표출 (또는 popup02 숨김 시 단독 표출)
+ * - 홈 페이지 접속 시 popup03 자동 실행
  * - "오늘 하루 보지 않기" 쿠키 처리
  *
  * @author NICE지니데이타
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 (function() {
@@ -70,7 +69,7 @@
 
         const popupWidth = isMobile() ? window.screen.width : 685;
         const popupHeight = isMobile() ? window.screen.height : 800 * 1.1;
-        const popupLeft = isMobile() ? 0 : 1440;
+        const popupLeft = isMobile() ? 0 : 40;
         const popupTop = isMobile() ? 0 : 40;
 
         const eventWindow03 = window.open(
@@ -89,8 +88,24 @@
 
     window.openEventPopup03Mobile = openEventPopup03;
 
+    function isHomePage() {
+        const path = window.location.pathname.replace(/\/+$/, '') || '/';
+        if (path === '/' || path === '/home' || path === '/index.html') {
+            return true;
+        }
+        const segments = path.split('/').filter(Boolean);
+        return segments.length === 1 && segments[0] === 'index.html';
+    }
+
     $(function() {
-        console.log('[EVENT-POPUP03] 스크립트 로드 완료 (홈 자동 실행은 popup.js에서 제어)');
+        console.log('[EVENT-POPUP03] 스크립트 로드 완료');
+
+        if (isHomePage()) {
+            console.log('[EVENT-POPUP03] 홈 페이지 감지 - 팝업 자동 실행');
+            if (!isHiddenToday03()) {
+                setTimeout(openEventPopup03, 500);
+            }
+        }
     });
 
 })();
